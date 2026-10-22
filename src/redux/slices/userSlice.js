@@ -38,7 +38,12 @@ export const signUpThunk = createAsyncThunk(
 const signInSlices = createSlice({
     name: "user",
     initialState,
-    reducers: {},
+    reducers: {
+        clearError: (state) => {
+            state.error = null;
+            state.isRejected = false;
+        }
+    },
     extraReducers: (builder) => {
         return builder
             .addAsyncThunk(signInThunk, {
@@ -80,3 +85,4 @@ const signInSlices = createSlice({
 });
 
 export default signInSlices.reducer;
+export const { clearError } = signInSlices.actions;

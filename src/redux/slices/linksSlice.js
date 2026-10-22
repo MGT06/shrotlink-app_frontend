@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import api from "../../api/interceptor";
 
 const initialState = {
   links: [],
@@ -21,7 +22,7 @@ export const getLinksThunk = createAsyncThunk(
       if (query?.page) params.append("page", query.page);
       if (query?.limit) params.append("limit", query.limit);
 
-      const response = await axios.get(
+      const response = await api.get(
         `${import.meta.env.VITE_API_URL}/api/links?${params.toString()}`,
         {
           headers: {
@@ -41,7 +42,7 @@ export const createLinkThunk = createAsyncThunk(
   async (payload, { rejectWithValue, getState }) => {
     try {
       const { token } = getState().userState;
-      const response = await axios.post(
+      const response = await api.post(
         `${import.meta.env.VITE_API_URL}/api/links`,
         payload,
         {
@@ -62,7 +63,7 @@ export const deleteLinkThunk = createAsyncThunk(
   async (id, { rejectWithValue, getState }) => {
     try {
       const { token } = getState().userState;
-      const response = await axios.delete(
+      const response = await api.delete(
         `${import.meta.env.VITE_API_URL}/api/links/${id}`,
         {
           headers: {

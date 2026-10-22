@@ -2,8 +2,9 @@ import { LinkIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { signUpThunk } from "../../redux/slices/userSlice";
+import { signUpThunk, clearError } from "../../redux/slices/userSlice";
 import Footer from "../../components/Footer";
+import { useEffect } from "react";
 
 function Register() {
   const {
@@ -16,7 +17,7 @@ function Register() {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isPending } = useSelector((state) => state.userState);
+  const { isPending, error } = useSelector((state) => state.userState);
 
   const password = watch("password");
 
@@ -28,6 +29,12 @@ function Register() {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   return (
     <>
@@ -44,6 +51,11 @@ function Register() {
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-md">
+            {error && (
+              <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
               <div className="grid gap-1">
                 <label htmlFor="full_name" className="text-sm">

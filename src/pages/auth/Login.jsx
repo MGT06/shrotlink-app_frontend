@@ -1,16 +1,17 @@
 import { ArrowRight, Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import Footer from "../../components/Footer";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { signInThunk } from "../../redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { signInThunk, clearError } from "../../redux/slices/userSlice";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isPending, error } = useSelector((state) => state.userState);
   const {
     register,
     handleSubmit,
@@ -28,6 +29,12 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
+
   return (
     <>
       <section className="h-screen flex justify-center items-center font-sans bg-primary">
@@ -43,6 +50,11 @@ function Login() {
                 Please enter your details to sign in
               </p>
             </div>
+            {error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
             <div className="grid gap-5">
               <div className="grid gap-2">
                 <label htmlFor="email" className="font-medium text-sm ">
@@ -102,9 +114,10 @@ function Login() {
               </div>
               <button
                 type="submit"
-                className="rounded-lg flex justify-center items-center gap-2 font-semibold text-lg md:text-sm lg:py-1 bg-blue-600 text-white py-2 cursor-pointer"
+                disabled={isPending}
+                className="rounded-lg flex justify-center items-center gap-2 font-semibold text-lg md:text-sm lg:py-1 bg-blue-600 text-white py-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Log In <ArrowRight className="md:w-5" />
+                {isPending ? "Logging In..." : "Log In"} <ArrowRight className="md:w-5" />
               </button>
               <p className="font-semibold text-xs text-center text-gray-400">
                 OR CONTINUE WITH
