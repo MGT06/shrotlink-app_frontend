@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { Plus, LogOut } from "lucide-react";
+import { logoutThunk } from "../redux/slices/userSlice";
 
 function Navbar() {
   const { token, loggedUser } = useSelector((state) => state.userState);
@@ -16,10 +17,16 @@ function Navbar() {
     return "U";
   };
 
-  const handleLogout = () => {
-    dispatch({ type: "user/logout" });
-    navigate("/auth/login");
-    setIsMenuOpen(false);
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutThunk()).unwrap();
+      navigate("/auth/login");
+      setIsMenuOpen(false);
+    } catch (e) {
+      console.log("Logout error:", e);
+      navigate("/auth/login");
+      setIsMenuOpen(false);
+    }
   };
 
   const closeMenu = () => {

@@ -34,6 +34,27 @@ export const signUpThunk = createAsyncThunk(
     },
 );
 
+export const logoutThunk = createAsyncThunk(
+    "logout",
+    async (_, { rejectWithValue, getState }) => {
+        try {
+            const { token } = getState().userState;
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/logout`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || "Logout failed");
+        }
+    },
+);
+
 
 const signInSlices = createSlice({
     name: "user",
@@ -78,6 +99,25 @@ const signInSlices = createSlice({
                 rejected: (state, { payload }) => {
                     state.isPending = false;
                     state.isRejected = true;
+                    state.error = payload;
+                },
+            })
+            .addAsyncThunk(logoutThunk, {
+                pending: (state) => {
+                    state.isPending = true;
+                },
+                fulfilled: (state) => {
+                    state.loggedUser = null;
+                    state.token = "";
+                    state.isPending = false;
+                    state.isFulfilled = false;
+                    state.isRejected = false;
+                    state.error = null;
+                },
+                rejected: (state, { payload }) => {
+                    state.loggedUser = null;
+                    state.token = "";
+                    state.isPending = false;
                     state.error = payload;
                 },
             });
