@@ -1,18 +1,33 @@
 import { LinkIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpThunk } from "../../redux/slices/userSlice";
 import Footer from "../../components/Footer";
 
 function Register() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
-    defaultValues: { email: "", password: "", confirm: "" },
+    defaultValues: { full_name: "", email: "", password: "", confirm: "" },
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isPending } = useSelector((state) => state.userState);
 
-  const onSubmit = () => {};
+  const password = watch("password");
+
+  const onSubmit = async (dataInput) => {
+    try {
+      await dispatch(signUpThunk(dataInput)).unwrap();
+      navigate("/auth/login");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -29,10 +44,31 @@ function Register() {
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-md">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="grid gap-4"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+              <div className="grid gap-1">
+                <label htmlFor="full_name" className="text-sm">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  {...register("full_name", {
+                    required: "Full name is required",
+                    minLength: {
+                      value: 3,
+                      message: "Full name must be at least 3 characters",
+                    },
+                  })}
+                  placeholder="John Doe"
+                  id="full_name"
+                  className="rounded-lg border px-3 py-2"
+                />
+                {errors.full_name && (
+                  <p className="text-xs text-red-500">
+                    {errors.full_name.message}
+                  </p>
+                )}
+              </div>
+
               <div className="grid gap-1">
                 <label htmlFor="email" className="text-sm">
                   Email
@@ -44,10 +80,10 @@ function Register() {
                   })}
                   placeholder="name@gmail.com"
                   id="email"
-                  className="border px-3 py-2 rounded-lg"
+                  className="rounded-lg border px-3 py-2"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-xs">{errors.email.message}</p>
+                  <p className="text-xs text-red-500">{errors.email.message}</p>
                 )}
               </div>
 
@@ -58,14 +94,18 @@ function Register() {
                 <input
                   type="password"
                   {...register("password", {
-                    required: "Email is required",
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
                   })}
                   placeholder="••••••••"
                   id="password"
-                  className="border px-3 py-2 rounded-lg"
+                  className="rounded-lg border px-3 py-2"
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-xs">
+                  <p className="text-xs text-red-500">
                     {errors.password.message}
                   </p>
                 )}
@@ -76,20 +116,18 @@ function Register() {
                   Confirm Password
                 </label>
                 <input
-                  type="confirm"
+                  type="password"
                   {...register("confirm", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: `Password must be at least 6 characters`,
-                    },
+                    required: "Confirm password is required",
+                    validate: (value) =>
+                      value === password || "Passwords do not match",
                   })}
                   placeholder="••••••••"
                   id="confirm"
-                  className="border px-3 py-2 rounded-lg"
+                  className="rounded-lg border px-3 py-2"
                 />
                 {errors.confirm && (
-                  <p className="text-red-500 text-xs">
+                  <p className="text-xs text-red-500">
                     {errors.confirm.message}
                   </p>
                 )}
@@ -97,9 +135,10 @@ function Register() {
 
               <button
                 type="submit"
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-blue-500 text-sm font-semibold text-white "
+                disabled={isPending}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-blue-500 text-sm font-semibold text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Sign Up
+                {isPending ? "Signing Up..." : "Sign Up"}
               </button>
             </form>
 
@@ -120,7 +159,6 @@ function Register() {
             Already have an account?{" "}
             <Link
               to={"/auth/login"}
-              href="#"
               className="font-bold text-blue-700 hover:underline"
             >
               Log in
