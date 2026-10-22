@@ -33,7 +33,7 @@ function Dashboard() {
   }, [dispatch, debouncedSearch, sort, page]);
 
   const handleCopy = (slug) => {
-    navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/${slug}`);
+    navigator.clipboard.writeText(`${import.meta.env.VITE_API_URL}/r/${slug}`);
   };
 
   const handleDelete = async (id) => {
@@ -132,7 +132,7 @@ function Dashboard() {
                 <div className="flex flex-col gap-3">
                   <div className="flex-1">
                     <a
-                      href={`${import.meta.env.VITE_APP_URL}/${link.slug}`}
+                      href={`${import.meta.env.VITE_APP_URL}/r/${link.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-base font-semibold text-blue-600 hover:underline"
