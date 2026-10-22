@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Copy, Trash2, Eye, Link as LinkIcon, SlidersHorizontal } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLinksThunk } from "../redux/slices/linksSlice";
+import { getLinksThunk, deleteLinkThunk } from "../redux/slices/linksSlice";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -27,8 +27,20 @@ function Dashboard() {
     navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/${slug}`);
   };
 
-  const handleDelete = (id) => {
-    console.log("Deleting link:", id);
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteLinkThunk(id)).unwrap();
+      dispatch(
+        getLinksThunk({
+          search: searchQuery,
+          sort: sort,
+          page: page,
+          limit: 10,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const formatDate = (dateString) => {

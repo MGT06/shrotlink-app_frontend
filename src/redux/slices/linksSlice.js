@@ -57,6 +57,26 @@ export const createLinkThunk = createAsyncThunk(
   }
 );
 
+export const deleteLinkThunk = createAsyncThunk(
+  "delete_link",
+  async (id, { rejectWithValue, getState }) => {
+    try {
+      const { token } = getState().userState;
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/links/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
 const linksSlice = createSlice({
   name: "links",
   initialState,
@@ -82,6 +102,23 @@ const linksSlice = createSlice({
         },
       })
       .addAsyncThunk(createLinkThunk, {
+        pending: (state) => {
+          state.isPending = true;
+          state.isFulfilled = false;
+          state.isRejected = false;
+          state.error = null;
+        },
+        fulfilled: (state) => {
+          state.isPending = false;
+          state.isFulfilled = true;
+        },
+        rejected: (state, { payload }) => {
+          state.isPending = false;
+          state.isRejected = true;
+          state.error = payload;
+        },
+      })
+      .addAsyncThunk(deleteLinkThunk, {
         pending: (state) => {
           state.isPending = true;
           state.isFulfilled = false;
