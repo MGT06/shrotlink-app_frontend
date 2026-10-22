@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Zap, PenTool, Gauge, CheckCircle } from "lucide-react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
@@ -48,6 +49,115 @@ function Landing() {
           </div>
         </div>
       </section>
+
+      <section className="px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Architectural Features
+            </p>
+            <h2 className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl">
+              Built for Enterprise Precision
+            </h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                <Zap className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900">
+                Easy Create
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Instantly generate performance-plus links at scale or through our elegant API accounts.
+              </p>
+            </div>
+
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                <PenTool className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900">
+                Custom Slugs
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Validate brand authority with readable, memorable links that resonate with your digital audience.
+              </p>
+            </div>
+
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
+                <Gauge className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900">
+                Team-Ready
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Manage access, departments with shared service dashboards, permissions, and unified analytics dashboard.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div className="overflow-hidden rounded-2xl bg-slate-100 shadow-lg">
+              <img
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80"
+                alt="Dashboard Analytics"
+                className="h-full w-full object-cover"
+              />
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Data-Driven Insights
+              </p>
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl">
+                Observe your link architecture in real-time.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                Every interaction, bar dashboard. Our dashboard provides surgical
+                precision where your traffic originates, who is engaging, and how
+                your team can optimize click-through across the globe.
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-blue-600" />
+                  <div>
+                    <p className="font-semibold text-slate-900">
+                      Geographic Distribution Maps
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-blue-600" />
+                  <div>
+                    <p className="font-semibold text-slate-900">
+                      Device & Browser Breakdown
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-blue-600" />
+                  <div>
+                    <p className="font-semibold text-slate-900">
+                      UTM Parameter Tracking
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
