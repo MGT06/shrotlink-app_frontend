@@ -7,21 +7,30 @@ import Footer from "../components/Footer";
 
 function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sort, setSort] = useState("desc");
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const { links, isPending } = useSelector((state) => state.linksState);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
     dispatch(
       getLinksThunk({
-        search: searchQuery,
+        search: debouncedSearch,
         sort: sort,
         page: page,
         limit: 10,
       })
     );
-  }, [dispatch, searchQuery, sort, page]);
+  }, [dispatch, debouncedSearch, sort, page]);
 
   const handleCopy = (slug) => {
     navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/${slug}`);
@@ -32,7 +41,7 @@ function Dashboard() {
       await dispatch(deleteLinkThunk(id)).unwrap();
       dispatch(
         getLinksThunk({
-          search: searchQuery,
+          search: debouncedSearch,
           sort: sort,
           page: page,
           limit: 10,
@@ -102,7 +111,7 @@ function Dashboard() {
               No links found
             </h3>
             <p className="mt-1 text-sm text-slate-500">
-              {searchQuery
+              {debouncedSearch
                 ? "Try adjusting your search query"
                 : "Get started by creating your first short link"}
             </p>
