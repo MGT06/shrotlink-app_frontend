@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice.js";
+import linksReducer from "./slices/linksSlice.js";
 
 import {
     FLUSH,
@@ -32,7 +33,8 @@ const persistSignInConfig = {
 
 const store = configureStore({
     reducer: {
-        userState: persistReducer(persistSignInConfig, userReducer)
+        userState: persistReducer(persistSignInConfig, userReducer),
+        linksState: linksReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
