@@ -4,6 +4,7 @@ import Register from "./pages/auth/Register";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import CreateLink from "./pages/CreateLink";
+import Redirect from "./pages/Redirect";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="register" element={<Register />} />
             </Route>
           </Route>
+          <Route path="/:slug" element={<Redirect />} />
         </Routes>
       </BrowserRouter>
     </>
