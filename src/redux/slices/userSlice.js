@@ -50,7 +50,7 @@ export const logoutThunk = createAsyncThunk(
             );
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.message || "Logout failed");
+            return rejectWithValue(err.response?.data?.message);
         }
     },
 );
