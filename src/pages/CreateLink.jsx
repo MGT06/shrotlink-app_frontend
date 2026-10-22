@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Eye } from "lucide-react";
 import { FaChartLine } from "react-icons/fa";
 import { MdQrCode2 } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { createLinkThunk } from "../redux/slices/linksSlice";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -13,13 +15,21 @@ function CreateLink() {
     watch,
     formState: { errors },
   } = useForm({
-    defaultValues: { destinationUrl: "", customSlug: "" },
+    defaultValues: { original_url: "", slug: "" },
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isPending } = useSelector((state) => state.linksState);
 
-  const customSlug = watch("customSlug");
+  const customSlug = watch("slug");
 
-  const onSubmit = (dataInput) => {
-    console.log("Creating link:", dataInput);
+  const onSubmit = async (dataInput) => {
+    try {
+      await dispatch(createLinkThunk(dataInput)).unwrap();
+      navigate("/dashboard");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -48,23 +58,23 @@ function CreateLink() {
             <div className="space-y-5">
               <div>
                 <label
-                  htmlFor="destinationUrl"
+                  htmlFor="original_url"
                   className="mb-2 block text-sm font-semibold text-slate-900"
                 >
                   DESTINATION URL *
                 </label>
                 <input
                   type="url"
-                  {...register("destinationUrl", {
+                  {...register("original_url", {
                     required: "Destination URL is required",
                   })}
-                  id="destinationUrl"
+                  id="original_url"
                   placeholder="https://example.com/your-long-url"
                   className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.destinationUrl && (
+                {errors.original_url && (
                   <p className="mt-1.5 text-xs text-red-500">
-                    {errors.destinationUrl.message}
+                    {errors.original_url.message}
                   </p>
                 )}
                 <p className="mt-1.5 text-xs text-slate-400">
@@ -74,16 +84,17 @@ function CreateLink() {
 
               <div>
                 <label
-                  htmlFor="customSlug"
+                  htmlFor="slug"
                   className="mb-2 block text-sm font-semibold text-slate-900"
                 >
                   CUSTOM SLUG (OPTIONAL)
                 </label>
                 <input
                   type="text"
-                  {...register("customSlug")}
-                  id="customSlug"
+                  {...register("slug")}
+                  id="slug"
                   placeholder="short-link"
+                  maxLength={6}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="mt-1.5 text-xs text-slate-400">
@@ -101,7 +112,7 @@ function CreateLink() {
                     <p className="mt-1 text-sm text-slate-700">
                       Your short link will be:{" "}
                       <span className="font-semibold text-blue-600">
-                        https://short.link/{customSlug || "my-custom-slug"}
+                        {import.meta.env.VITE_APP_URL}/{customSlug || "my-custom-slug"}
                       </span>
                     </p>
                   </div>
@@ -113,9 +124,10 @@ function CreateLink() {
           <div className="flex gap-3">
             <button
               type="submit"
-              className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+              disabled={isPending}
+              className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Create Link
+              {isPending ? "Creating..." : "Create Link"}
             </button>
             <Link
               to="/dashboard"
