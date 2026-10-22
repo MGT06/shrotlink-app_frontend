@@ -20,11 +20,11 @@ function Login() {
 
   return (
     <>
-      <section className="h-screen flex justify-center items-center bg-primary">
+      <section className="h-screen flex justify-center items-center font-sans bg-primary">
         <div className="grid gap-8 w-screen md:w-90 mx-7">
           <h1 className="text-2xl font-black text-center">ShortLink</h1>
           <form
-            className="rounded-lg border border-gray-300 grid gap-4 px-8 py-8 bg-white shadow-md"
+            className="rounded-lg border-gray-300 grid gap-4 px-8 py-8 bg-white shadow-md"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div>
@@ -42,9 +42,10 @@ function Login() {
                   Email Address
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   {...register("email", { required: "email is required" })}
                   id="email"
+                  placeholder="name@gmail.com"
                   className="rounded-lg border py-2.5 px-4 md:py-1 md:px-3"
                 />
                 {errors.email && (
@@ -61,7 +62,7 @@ function Login() {
                   >
                     Password
                   </label>
-                  <Link className="text-blue-600 font-bold text-sm md:text-xs">
+                  <Link className="text-blue-600 font-bold text-sm md:text-xs hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -72,6 +73,7 @@ function Login() {
                       required: "password is required",
                     })}
                     id="password"
+                    placeholder="••••••••"
                     className="rounded-lg border py-2.5 px-4 w-full md:py-1 md:px-3"
                   />
                   {showPassword ? (
@@ -107,9 +109,9 @@ function Login() {
               </button>
             </div>
           </form>
-          <p className="text-center text-sm font-bold">
+          <p className="text-center text-xs text-slate-600">
             Dont have an account?{" "}
-            <Link className="text-blue-600 font-bold">Sign Up</Link>
+            <Link to={"/auth/register"} className="text-blue-600 font-bold hover:underline">Sign Up</Link>
           </p>
         </div>
       </section>
