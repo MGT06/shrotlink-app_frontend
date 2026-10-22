@@ -129,7 +129,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Related Project
 
 ### Backend API
-🔗 [ShortLink App - Backend](https://github.com/yourusername/shortlink-app_backend)
+[ShortLink App - Backend](https://github.com/MGT06/shortlink-app_backend)
 
 The backend API is built with Go and provides RESTful endpoints for:
 - User authentication (register, login)
