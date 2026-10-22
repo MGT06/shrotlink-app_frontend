@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 function Navbar() {
   return (
@@ -6,15 +6,36 @@ function Navbar() {
       <div className="flex items-center gap-8">
         <h1 className="text-lg font-bold">ShortLink</h1>
         <div className="hidden items-center gap-6 text-sm md:flex">
-          <a href="#" className="font-semibold text-blue-600">
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "font-semibold text-blue-600"
+                : "text-slate-600 hover:text-slate-900"
+            }
+          >
             Dashboard
-          </a>
-          <a href="#" className="text-slate-600 hover:text-slate-900">
+          </NavLink>
+          <NavLink
+            to="/analytics"
+            className={({ isActive }) =>
+              isActive
+                ? "font-semibold text-blue-600"
+                : "text-slate-600 hover:text-slate-900"
+            }
+          >
             Analytics
-          </a>
-          <a href="#" className="text-slate-600 hover:text-slate-900">
+          </NavLink>
+          <NavLink
+            to="/create-link"
+            className={({ isActive }) =>
+              isActive
+                ? "font-semibold text-blue-600"
+                : "text-slate-600 hover:text-slate-900"
+            }
+          >
             Links
-          </a>
+          </NavLink>
         </div>
       </div>
       <div className="flex items-center gap-3">
