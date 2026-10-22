@@ -1,0 +1,121 @@
+import { ArrowRight, Eye, EyeClosed } from "lucide-react";
+import { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
+import { Link } from "react-router";
+import Footer from "../../components/Footer";
+import { useForm } from "react-hook-form";
+
+function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = () => {};
+
+  return (
+    <>
+      <section className="h-screen flex justify-center items-center bg-primary">
+        <div className="grid gap-8 w-screen md:w-90 mx-7">
+          <h1 className="text-2xl font-black text-center">ShortLink</h1>
+          <form
+            className="rounded-lg border border-gray-300 grid gap-4 px-8 py-8 bg-white shadow-md"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div>
+              <p className="text-2xl md:text-xl font-semibold">Welcome Back</p>
+              <p className="text-sm md:text-xs">
+                Please enter your details to sign in
+              </p>
+            </div>
+            <div className="grid gap-5">
+              <div className="grid gap-2">
+                <label
+                  htmlFor="email"
+                  className="font-medium text-sm md:text-xs"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="text"
+                  {...register("email", { required: "email is required" })}
+                  id="email"
+                  className="rounded-lg border py-2.5 px-4 md:py-1 md:px-3"
+                />
+                {errors.email && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <div className="flex justify-between">
+                  <label
+                    htmlFor="password"
+                    className="font-medium text-sm md:text-xs"
+                  >
+                    Password
+                  </label>
+                  <Link className="text-blue-600 font-bold text-sm md:text-xs">
+                    Forgot password?
+                  </Link>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    {...register("password", {
+                      required: "password is required",
+                    })}
+                    id="password"
+                    className="rounded-lg border py-2.5 px-4 w-full md:py-1 md:px-3"
+                  />
+                  {showPassword ? (
+                    <Eye
+                      className="absolute top-2.5 md:top-1.5  right-5 cursor-pointer"
+                      onClick={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <EyeClosed
+                      className="absolute top-2.5 md:top-1.5 right-5 cursor-pointer "
+                      onClick={() => setShowPassword(true)}
+                    />
+                  )}
+                </div>
+                {errors.password && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="rounded-lg flex justify-center items-center gap-2 font-semibold text-lg md:text-sm lg:py-1 bg-blue-600 text-white py-2 cursor-pointer"
+              >
+                Log In <ArrowRight className="md:w-5" />
+              </button>
+              <p className="font-semibold text-xs text-center text-gray-400">
+                OR CONTINUE WITH
+              </p>
+              <button className="flex text-sm gap-4 justify-center items-center font-medium cursor-pointer">
+                <FaGoogle />
+                Sign In With Google
+              </button>
+            </div>
+          </form>
+          <p className="text-center text-sm font-bold">
+            Dont have an account?{" "}
+            <Link className="text-blue-600 font-bold">Sign Up</Link>
+          </p>
+        </div>
+      </section>
+      <Footer />
+    </>
+  );
+}
+
+export default Login;
