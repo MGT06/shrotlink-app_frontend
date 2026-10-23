@@ -8,7 +8,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('persist:loggedUser');
+      localStorage.removeItem('persist:user');
       
       window.location.href = '/auth/login';
     }
